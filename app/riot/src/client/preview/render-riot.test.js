@@ -94,4 +94,28 @@ describe('render a riot element', () => {
 
     expect(rootElement.innerHTML).toMatchSnapshot();
   });
+
+  it('can accept a constructor', () => {
+    expect(
+      render(
+        {
+          tags: [
+            {
+              content:
+                "<SimpleTest><div>HACKED : {opts.hacked} ; simple test ({opts.test || 'without parameter'}). Oh, by the way ({opts.riotValue || '... well, nothing'})</div></SimpleTest>",
+              boundAs: 'mustBeUniquePlease',
+            },
+          ],
+          template:
+            '<SimpleTest hacked={hacked} test={ "with a parameter" } value={"value is mapped to riotValue"}></SimpleTest>',
+          tagConstructor() {
+            this.hacked = true;
+          },
+        },
+        context
+      )
+    ).toBe(true);
+
+    expect(rootElement.innerHTML).toMatchSnapshot();
+  });
 });
